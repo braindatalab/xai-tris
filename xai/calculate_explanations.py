@@ -6,7 +6,7 @@ from common import XAIScenarios, SEED
 from utils import load_json_file,  dump_as_pickle, load_pickle
 from training.models import CNN
 
-from xai.xai_methods import get_attributions, get_baselines
+from xai.methods import get_attributions, get_baselines
 import gc
 
 from glob import glob
