@@ -1,0 +1,41 @@
+{
+  "data_scenario": "tetris_data",
+  "output_dir": "artifacts/tetris/data",
+  "num_experiments": 1,
+  "sample_size": 1000,
+  "test_split": 0.1,
+  "image_shape": [8,8],
+  "image_scale": 8,
+  "mean_data": 0,
+  "var_data": 0.5,
+  "smoothing_sigma": 10,
+  "manipulation": 1.0,
+  "positions": [[8,8],[32,40]],
+  "patterns": ["t", "l"],
+  "parameterizations": {
+    "linear": {
+      "scenario": "linear",
+      "manipulation_type": "additive",
+      "pattern_scales": [8],
+      "snrs": [[0.03],[0.02],[0.06]]
+    },
+    "multiplicative": {
+      "scenario": "multiplicative",
+      "manipulation_type": "multiplicative",
+      "pattern_scales": [8],
+      "snrs": [[0.65],[0.05],[0.2]]
+    },
+    "translations_rotations": {
+      "scenario": "translations_rotations",
+      "manipulation_type": "additive",
+      "pattern_scales": [4],
+      "snrs": [[0.575],[0.375],[0.03]]
+    },
+    "xor": {
+      "scenario": "xor",
+      "manipulation_type": "additive",
+      "pattern_scales": [8],
+      "snrs": [[0.075],[0.03],[0.13]]
+    }
+  }
+}

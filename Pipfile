@@ -1,0 +1,30 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+numpy = "*"
+scikit-learn = "*"
+matplotlib = "*"
+seaborn = "*"
+torch = "*"
+torchvision = "*"
+torchmetrics = "*"
+tqdm = "*"
+captum = "*"
+innvestigate = "*"
+tensorflow = "==1.13.1"
+ipykernel = "*"
+keras = "==2.2.4"
+h5py = "==2.10.0"
+openpyxl = "*"
+mlxtend = "*"
+pip = "*"
+jupyter = "*"
+pot = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.7"
