@@ -44,7 +44,7 @@ def apply_xai(config: Dict) -> XAIScenarios:
             'CNN': [],
             'scenario': scenario_name
         }
-        for model_name in ['LLR', 'MLP']:
+        for model_name in ['LLR', 'MLP, CNN']:
             if model_name == 'LLR' and 'linear' not in sys.argv[1]:
                 continue
 
