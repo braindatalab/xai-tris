@@ -1,0 +1,10 @@
+{
+  "batch_size": 512,
+  "epochs": 2,
+  "runs_per_model": 2,
+  "patience": 400,
+  "output_dir": "artifacts/tetris/training",
+  "data_path": "artifacts/tetris/data/2023-06-13-15-52",
+  "checkpoint_path":  "",
+  "data_scenario": "tetris_data"
+}

@@ -23,6 +23,7 @@ mlxtend = "*"
 pip = "*"
 jupyter = "*"
 pot = "*"
+protobuf = "==3.20"
 
 [dev-packages]
 
