@@ -31,7 +31,9 @@ random.seed(SEED)
 
 from glob import glob
 
-DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+# DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+DEVICE = torch.device('cpu')
+os.environ["CUDA_VISIBLE_DEVICES"]=""
 
 from training.models import models_dict, init_he_normal
 

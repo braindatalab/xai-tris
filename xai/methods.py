@@ -23,11 +23,11 @@ import random
 random.seed(SEED)
 
 
-mini_batch = 5
+# mini_batch = 5
 
 baselines_methods = ["Integrated Gradients", "DeepLift", "DeepSHAP", "Gradient SHAP", "Shapley Value Sampling", "Kernel SHAP", "LIME"]
 
-def get_attributions(model: torch.nn.Module, dataset: DataRecord, methods: List, test_size: int) -> Dict:
+def get_attributions(model: torch.nn.Module, dataset: DataRecord, methods: List, test_size: int, mini_batch: int) -> Dict:
     attributions = dict()
     n_dim = dataset.x_test.shape[1]
     edge_length = int(np.sqrt(n_dim)) # pixel width/height, 8x8 normally and 24x24 for the scaled up experiment
@@ -66,7 +66,7 @@ def get_attributions(model: torch.nn.Module, dataset: DataRecord, methods: List,
         attributions[method_name] = method_attributions
     return attributions
 
-def get_filter_attributions(dataset: DataRecord, methods: List, test_size: int) -> Dict:
+def get_baselines(dataset: DataRecord, methods: List, test_size: int) -> Dict:
     attributions = dict()
     n_dim = dataset.x_test.shape[1]
     edge_length = int(np.sqrt(n_dim))
