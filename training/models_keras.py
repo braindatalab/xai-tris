@@ -43,8 +43,36 @@ def create_mlp_keras(lr=0.0004, image_shape=[64,64]):
     model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
     return model
 
+
+def create_cnn8by8_keras(lr=0.0004, image_shape=[8,8]):
+    model = Sequential()
+    initializer = initializers.he_normal(seed=SEED)
+    model.add(Conv2D(filters=4, kernel_size=2, strides=1, input_shape=(8,8,1), padding='same', name='conv_1', activation='relu', kernel_initializer=initializer))
+    model.add(MaxPool2D(2, padding='same', strides=2, name='mp_1'))
+    for i in range(3):
+        model.add(Conv2D(filters=4, kernel_size=2, strides=1, padding='same', name=f'conv_{i+2}', activation='relu', kernel_initializer=initializer))
+        model.add(MaxPool2D(2, padding='same', strides=2, name=f'mp_{i+2}'))
+    model.add(Flatten(name=f'flatten'))
+    model.add(Dense(2, activation='softmax', name=f'output_softmax',  kernel_initializer=initializer))
+    optimizer = Adam(lr)
+    model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
+    return model
+
+def create_mlp8by8_keras(lr=0.0004, image_shape=[8,8]):
+    model = Sequential()
+    initializer = initializers.he_normal(seed=SEED)
+    model.add(Dense(32, input_dim=64, activation='relu', name='fc_1', kernel_initializer=initializer))
+    model.add(Dense(16, input_dim=32, activation='relu', name='fc_2', kernel_initializer=initializer))
+    model.add(Dense(8, input_dim=16, activation='relu', name='fc_3', kernel_initializer=initializer))
+    model.add(Dense(2, input_dim=8, activation='softmax', name='output_softmax', kernel_initializer=initializer))
+    optimizer = Adam(lr=lr)
+    model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
+    return model
+
 models_dict = {
     "CNN_Keras": create_cnn_keras,
     "LLR_Keras": create_llr_keras,
     "MLP_Keras": create_mlp_keras,
+    "CNN8by8_Keras": create_cnn8by8_keras,
+    "MLP8by8_Keras": create_mlp8by8_keras,
 }

@@ -45,8 +45,10 @@ def main():
             if model_name in model_path:
                 model = load_model(model_path)
                 test_data_keras = data[scenario].x_test.detach().numpy()
+                n_dim = test_data_keras.shape[1]
+                edge_length = int(np.sqrt(n_dim))
                 if model_name == 'CNN':
-                    test_data_keras = test_data_keras.reshape(test_data_keras.shape[0], 64, 64, 1)
+                    test_data_keras = test_data_keras.reshape(test_data_keras.shape[0], edge_length, edge_length, 1)
                 #print(model_name, test_data_keras.shape)
                 keras_otpt = model.predict(test_data_keras)
                 keras_inds = data[scenario].y_test.detach().numpy() == np.argmax(keras_otpt, axis=1)
@@ -54,8 +56,8 @@ def main():
                 del model
                 gc.collect()
 
-                args_list.append([xai_output[scenario], scenario, data[scenario].masks_test[:test_size], test_size, model_name, model_ind, config["mini_batch"]])
-                model_ind +=1
+                args_list.append([xai_output[scenario], scenario, data[scenario].masks_test[:test_size], test_size, model_name, model_ind, config["mini_batch"], n_dim])
+                model_ind += 1
                 
     intersection = np.logical_and.reduce(inds_list)
     print(intersection)

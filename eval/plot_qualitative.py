@@ -16,7 +16,7 @@ from glob import glob
 from torch import load
 import gc
 
-n_dim = 64**2
+# n_dim = 64**2
 normal_t = [[1,0],[1,1],[1,0]]
 normal_l = [[1,0],[1,0],[1,1]]
 combined_mask = np.zeros((8,8))
@@ -54,7 +54,7 @@ def get_local_plot_data(data, xai_output, model_num=0,plot_inds=[0,1,2,3,4], met
     return all_plots
 
 
-def get_global_plot_data(data, xai_output, correct_inds, test_size, method_names=['Gradient SHAP', 'LIME', 'LRP', 'Integrated Gradients'], baselines=['laplace', 'sobel']):
+def get_global_plot_data(data, xai_output, correct_inds, test_size, method_names=['Gradient SHAP', 'LIME', 'LRP', 'Integrated Gradients'], baselines=['laplace', 'x']):
     plot_data = {}
     i = 0
     for scenario, scenario_xai_results in xai_output.items():
@@ -78,9 +78,14 @@ def get_global_plot_data(data, xai_output, correct_inds, test_size, method_names
                 plot_data[scenario][model_name].append(np.mean(method_data, axis=0))
         
         for baseline in baselines:
-            print(xai_output[scenario][baseline])
-            print(xai_output[scenario][baseline].shape)
-            plot_data[scenario][baseline] = xai_output[scenario][baseline][plot_inds]
+            # print(xai_output[scenario][baseline])
+            # print(xai_output[scenario][baseline].shape)
+            if baseline == 'x':
+                print(xai_output[scenario][baseline])
+                print(xai_output[scenario][baseline].shape)
+                plot_data[scenario][baseline] = xai_output[scenario][baseline][:test_size][plot_inds]
+            else:
+                plot_data[scenario][baseline] = xai_output[scenario][baseline][plot_inds]
         
         i+=1
     return plot_data
@@ -94,7 +99,7 @@ def scen_key_mapping(scen_key):
     return scen_dict[components[0]] + '\n' +  bg_dict[components[-1]]
 
 
-def qualitative_results_landscape(all_plots, figsize=(17,14), out_dir='./figures'):
+def qualitative_results_landscape(all_plots, figsize=(17,14), edge_length=64, out_dir='./figures'):
     for plot_ind, plot_data in enumerate(all_plots):
         f = plt.figure(figsize=figsize)
         gs = gridspec.GridSpec(1,6, hspace=0.01, wspace=0.05, width_ratios=[0.65,1,1,1,1,0.32]) # Grid of [ [data, ground truth], [method for each model] * 5, [baselines] ]
@@ -116,18 +121,22 @@ def qualitative_results_landscape(all_plots, figsize=(17,14), out_dir='./figures
         i = 0
         for scenario, scen_data in plot_data.items():
             data_ax = f.add_subplot(data_gs[i,0])
-            data_ax.imshow(np.reshape(scen_data['Data'],(64,64)), cmap="RdBu_r", vmin=-1, vmax=1)
+            data_ax.imshow(np.reshape(scen_data['Data'],(edge_length,edge_length)), cmap="RdBu_r", vmin=-1, vmax=1)
             data_ax.set_xticks([])
             data_ax.set_yticks([])
             data_ax.set_ylabel(scen_key_mapping(scenario).replace(" ", "\n"), fontdict = {'fontsize' : 12})
             
             gt_ax = f.add_subplot(data_gs[i,1])
             gt_data = np.abs(scen_data['Ground Truth'])
-            gt_data[gt_data >= 0.05] = 1
-            gt_data[gt_data < 0.05] = 0
+            if edge_length == 64:
+                gt_data[gt_data >= 0.05] = 1
+                gt_data[gt_data < 0.05] = 0
             if i < 6:
-                gt_data = combined_mask_binary
-            gt_ax.imshow(np.reshape(gt_data,(64,64)), cmap="magma", vmin=0, vmax=1)
+                if edge_length == 64:
+                    gt_data = combined_mask_binary
+                else:
+                    gt_data = combined_mask
+            gt_ax.imshow(np.reshape(gt_data,(edge_length,edge_length)), cmap="magma", vmin=0, vmax=1)
             gt_ax.set_xticks([])
             gt_ax.set_yticks([])
             
@@ -144,7 +153,7 @@ def qualitative_results_landscape(all_plots, figsize=(17,14), out_dir='./figures
                             ax.set_xlabel(model_name, fontdict = {'fontsize' : 12})
                             ax.xaxis.set_label_coords(0.5,0.0)
                     else:
-                        ax.imshow(np.reshape(np.abs(scen_data[model_name][method_ind]),(64,64)), cmap="magma")
+                        ax.imshow(np.reshape(np.abs(scen_data[model_name][method_ind]),(edge_length,edge_length)), cmap="magma")
                         ax.set_xticks([])
                         ax.set_yticks([])
                         
@@ -161,7 +170,7 @@ def qualitative_results_landscape(all_plots, figsize=(17,14), out_dir='./figures
                     method_ind += 1
             
             lapl_ax = f.add_subplot(baselines_gs[i,0])
-            lapl_ax.imshow(np.reshape(np.abs(scen_data['laplace']),(64,64)), cmap="magma")
+            lapl_ax.imshow(np.reshape(np.abs(scen_data['laplace']),(edge_length,edge_length)), cmap="magma")
             lapl_ax.set_xticks([])
             lapl_ax.set_yticks([])
             
@@ -179,7 +188,7 @@ def qualitative_results_landscape(all_plots, figsize=(17,14), out_dir='./figures
         plt.savefig(f'{out_dir}/qualitative_results_landscape_hires_{plot_ind}.png', bbox_inches="tight", dpi=300)
 
 
-def global_results(plot_data, figsize=(8.5,14), out_dir='./figures'):
+def global_results(plot_data, figsize=(8.5,14), edge_length=64, out_dir='./figures'):
     f = plt.figure(figsize=figsize)
     gs = gridspec.GridSpec(6, 1, wspace=0.01, hspace=0.1, height_ratios=[0.315,1,1,1,1,0.65]) # Grid of [ [data, ground truth], [method for each model] * 5, [baselines] ]
 
@@ -198,9 +207,15 @@ def global_results(plot_data, figsize=(8.5,14), out_dir='./figures'):
     baselines_gs = gridspec.GridSpecFromSubplotSpec(2, 9, subplot_spec=gs[5], hspace=h_space, wspace=w_space)
 
     i = 0
+
+    if edge_length == 64:
+        gt_data = combined_mask_binary
+    else:
+        gt_data = combined_mask
+
     for scenario, scen_data in plot_data.items():
         gt_ax = f.add_subplot(data_gs[0,i])
-        gt_ax.imshow(np.reshape(combined_mask_pat_scaled,(64,64)), cmap="magma", vmin=0, vmax=1)
+        gt_ax.imshow(np.reshape(gt_data,(edge_length,edge_length)), cmap="magma", vmin=0, vmax=1)
         gt_ax.set_xticks([])
         gt_ax.set_yticks([])
         gt_ax.set_xlabel(scen_key_mapping(scenario).replace(" ", "\n"), fontdict = {'fontsize' : 12})
@@ -220,7 +235,7 @@ def global_results(plot_data, figsize=(8.5,14), out_dir='./figures'):
                         ax.yaxis.set_label_position("right")
                         ax.yaxis.set_label_coords(1.0,0.5)
                 else:
-                    ax.imshow(np.reshape(np.abs(np.mean(scen_data[model_name][method_ind], axis=0)),(64,64)), cmap="magma")
+                    ax.imshow(np.reshape(np.abs(np.mean(scen_data[model_name][method_ind], axis=0)),(edge_length,edge_length)), cmap="magma")
                     ax.set_xticks([])
                     ax.set_yticks([])
                     
@@ -237,12 +252,12 @@ def global_results(plot_data, figsize=(8.5,14), out_dir='./figures'):
                 method_ind += 1
         
         lapl_ax = f.add_subplot(baselines_gs[0,i])
-        lapl_ax.imshow(np.reshape(np.abs(np.mean(scen_data['laplace'], axis=0)),(64,64)), cmap="magma")
+        lapl_ax.imshow(np.reshape(np.abs(np.mean(scen_data['laplace'], axis=0)),(edge_length,edge_length)), cmap="magma")
         lapl_ax.set_xticks([])
         lapl_ax.set_yticks([])
 
         rand_ax = f.add_subplot(baselines_gs[1,i])
-        rand_ax.imshow(np.reshape(np.abs(np.mean(scen_data['x'], axis=0)),(64,64)), cmap="magma")
+        rand_ax.imshow(np.reshape(np.abs(np.mean(scen_data['x'], axis=0)),(edge_length,edge_length)), cmap="magma")
         rand_ax.set_xticks([])
         rand_ax.set_yticks([])
         
@@ -269,6 +284,8 @@ def main():
     for scenario in ['linear', 'multiplicative', 'translations_rotations', 'xor']:
         for background in ['uncorrelated', 'correlated', 'imagenet']: 
             data_paths = glob(f'{config["data_path"]}/{scenario}*{background}.pkl')
+            if data_paths == []:
+                continue
             data_key = ''
             for data_path in data_paths:
                 with open(data_path, 'rb') as file:
@@ -298,9 +315,9 @@ def main():
                     if model_name in model_path:
                         model = load(model_path, map_location=torch.device('cpu'))
                         test_data_torch = data[data_key].x_test
-                        n_dim = int(np.sqrt(test_data_torch.shape[1]))
+                        edge_length = int(np.sqrt(test_data_torch.shape[1]))
                         if model_name == 'CNN':
-                            test_data_torch = test_data_torch.reshape(test_data_torch.shape[0], 1, n_dim, n_dim)
+                            test_data_torch = test_data_torch.reshape(test_data_torch.shape[0], 1, edge_length, edge_length)
                         #print(model_name, test_data_torch.shape)
                         torch_otpt = model(test_data_torch.float())
                         torch_inds = data[data_key].y_test.detach().numpy() == np.argmax(torch_otpt.detach().numpy(), axis=1)
@@ -313,8 +330,8 @@ def main():
 
     # choose an index to plot or give a list of indexes, comment below intersection = to get the above
     #  intersection of correctly predicted test samples to plot across all scenarios
-    # rand_idx = 0
-    # intersection = [rand_idx]
+    rand_idx = 0
+    intersection = [rand_idx]
 
     out_folder_path = f'{config["out_dir"]}/figures'
     Path(f'{out_folder_path}').mkdir(parents=True, exist_ok=True)
@@ -324,10 +341,10 @@ def main():
                                     baselines=['laplace', 'rand'],                      
                 )
     
-    qualitative_results_landscape(plot_data_local, out_dir=out_folder_path)
+    qualitative_results_landscape(plot_data_local, edge_length=edge_length, out_dir=out_folder_path)
 
-    global_plot_data = get_global_plot_data(data, xai_results, correct_inds, config['test_size'])
-    global_results(global_plot_data, out_dir=out_folder_path)
+    global_plot_data = get_global_plot_data(data, xai_results, np.invert(correct_inds), config['test_size'])
+    global_results(global_plot_data, edge_length=edge_length, out_dir=out_folder_path)
     return 
 
 if __name__ == '__main__':

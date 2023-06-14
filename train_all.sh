@@ -1,6 +1,6 @@
 #!/bin/bash
 
-out_dir=training_output
+out_dir=training_output_8by8
 # timestamp = scaling_experiment
 
 # i = num_experiments

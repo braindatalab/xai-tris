@@ -48,15 +48,17 @@ def main():
             if model_name in model_path:
                 model = load(model_path, map_location=torch.device('cpu'))
                 test_data_torch = data[scenario].x_test
+                n_dim = test_data_torch.shape[1]
+                edge_length = int(np.sqrt(n_dim))
                 if model_name == 'CNN':
-                    test_data_torch = test_data_torch.reshape(test_data_torch.shape[0], 1, 64, 64)
+                    test_data_torch = test_data_torch.reshape(test_data_torch.shape[0], 1, edge_length, edge_length)
                 torch_otpt = model(test_data_torch.float())
                 torch_inds = data[scenario].y_test.detach().numpy() == np.argmax(torch_otpt.detach().numpy(), axis=1)
                 inds_list.append(torch_inds)
                 del model
                 gc.collect()
 
-                args_list.append([xai_output[scenario], scenario, data[scenario].masks_test[:test_size], test_size, model_name, model_ind, config["mini_batch"]])
+                args_list.append([xai_output[scenario], scenario, data[scenario].masks_test[:test_size], test_size, model_name, model_ind, config["mini_batch"], n_dim])
                 model_ind +=1
                 
     intersection = np.logical_and.reduce(inds_list)

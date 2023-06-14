@@ -70,7 +70,64 @@ class MLP(Module):
     def forward(self, x):
         x = softmax(self.linear_layers(x), dim=1)
         return x
-    
+
+class CNN8by8(Module):   
+    def __init__(self, n_dim, linear_dim):
+        super(CNN8by8, self).__init__()
+        self.n_dim = n_dim
+        self.linear_dim = linear_dim
+        self.cnn_layers = Sequential(
+            Conv2d(1, 4, kernel_size=2, stride=1, padding=1),
+            # BatchNorm2d(4),
+            ReLU(),
+            MaxPool2d(kernel_size=2, stride=2),
+            Conv2d(4, 4, kernel_size=2, stride=1, padding=1),
+            # BatchNorm2d(4),
+            ReLU(),
+            MaxPool2d(kernel_size=2, stride=2),
+            # Defining another 2D convolution layer
+            Conv2d(4, 4, kernel_size=2, stride=1, padding=1),
+            # BatchNorm2d(4),
+            ReLU(),
+            MaxPool2d(kernel_size=2, stride=2),
+            Conv2d(4, 4, kernel_size=2, stride=1, padding=1),
+            # BatchNorm2d(4),
+            ReLU(),
+            MaxPool2d(kernel_size=2, stride=2),
+        )
+        
+        self.linear_layers = Sequential(
+            Linear(self.linear_dim, 2)
+        )
+
+    # Defining the forward pass    
+    def forward(self, x):
+        x = self.cnn_layers(x)
+        x = x.view(x.size(0), -1)
+        x = self.linear_layers(x)
+        return x
+
+class MLP8by8(Module):   
+    def __init__(self, n_dim):
+        super(MLP8by8, self).__init__()
+        self.n_dim = n_dim
+
+        self.linear_layers = Sequential(
+            Linear(self.n_dim, int(self.n_dim/2)),
+            ReLU(),
+            Linear(int(self.n_dim/2), int(self.n_dim/4)),
+            ReLU(),
+            Linear(int(self.n_dim/4), int(self.n_dim/8)),
+            ReLU(),
+            Linear(int(self.n_dim/8),2)
+        )
+
+    # Defining the forward pass    
+    def forward(self, x):
+        x = self.linear_layers(x)
+        return x
+
+
 def init_he_normal(layer):
     if isinstance(layer, Conv2d) or isinstance(layer,Linear):
         kaiming_normal_(layer.weight)
@@ -78,5 +135,7 @@ def init_he_normal(layer):
 models_dict = {
     "CNN": CNN,
     "LLR": LLR,
-    "MLP": MLP
+    "MLP": MLP,
+    "CNN8by8": CNN8by8,
+    "MLP8by8": MLP8by8
 }

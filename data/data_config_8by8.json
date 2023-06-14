@@ -3,40 +3,40 @@
   "output_dir": "artifacts/tetris/data",
   "num_experiments": 1,
   "sample_size": 1000,
-  "test_split": 0.1,
+  "test_split": 0.2,
   "image_shape": [8,8],
-  "image_scale": 8,
+  "image_scale": 1,
   "mean_data": 0,
   "var_data": 0.5,
-  "smoothing_sigma": 10,
+  "smoothing_sigma": 3,
   "manipulation": 1.0,
-  "positions": [[8,8],[32,40]],
+  "positions": [[1,1],[4,5]],
   "patterns": ["t", "l"],
-  "use_imagenet": true,
+  "use_imagenet": false,
   "parameterizations": {
     "linear": {
       "scenario": "linear",
       "manipulation_type": "additive",
-      "pattern_scales": [8],
-      "snrs": [[0.03],[0.02],[0.06]]
+      "pattern_scales": [1],
+      "snrs": [[0.18],[0.0125],[]]
     },
     "multiplicative": {
       "scenario": "multiplicative",
       "manipulation_type": "multiplicative",
-      "pattern_scales": [8],
-      "snrs": [[0.65],[0.05],[0.2]]
+      "pattern_scales": [1],
+      "snrs": [[0.7],[0.1],[]]
     },
     "translations_rotations": {
       "scenario": "translations_rotations",
       "manipulation_type": "additive",
-      "pattern_scales": [4],
-      "snrs": [[0.575],[0.375],[0.03]]
+      "pattern_scales": [1],
+      "snrs": [[0.65],[0.2],[]]
     },
     "xor": {
       "scenario": "xor",
       "manipulation_type": "additive",
-      "pattern_scales": [8],
-      "snrs": [[0.075],[0.03],[0.13]]
+      "pattern_scales": [1],
+      "snrs": [[0.35],[0.15],[]]
     }
   }
 }

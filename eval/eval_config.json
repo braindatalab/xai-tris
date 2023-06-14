@@ -1,8 +1,8 @@
 {
-    "data_path": "./artifacts/tetris/data/2023-06-13-15-52",
-    "training_path": "./artifacts/tetris/training/training_output",
+    "data_path": "./artifacts/tetris/data/2023-06-14-11-32",
+    "training_path": "./artifacts/tetris/training/training_output_8by8",
     "xai_path": "./artifacts/tetris/xai/xai_output",
-    "out_dir": "./artifacts/tetris/eval/eval_output",
+    "out_dir": "./artifacts/tetris/eval/eval_output_8by8",
     "num_experiments": 1,
     "num_threads": 5,
     "test_size": 5,

@@ -59,6 +59,8 @@ def train(config: Dict, data: List, lr: float, folder_path: str, experiment_num:
     scenarios['data_path'] = config['data_path']
 
     models = ['LLR', 'MLP', 'CNN']
+    if edge_length == 8:
+        models = ['LLR', 'MLP8by8', 'CNN8by8']
     accs = {'val': pd.Series(), 'test': pd.Series()}
 
     
@@ -308,9 +310,7 @@ def main():
     scenarios_checkpoint = None
     restart_point = None
 
-    lr = 0.0005
-
-    scenarios = train(config=config, data=data_scenario, lr=lr, folder_path=folder_path, experiment_num=int(sys.argv[3]), scenarios_checkpoint=scenarios_checkpoint, restart_point=restart_point)
+    scenarios = train(config=config, data=data_scenario, lr=config['lr'], folder_path=folder_path, experiment_num=int(sys.argv[3]), scenarios_checkpoint=scenarios_checkpoint, restart_point=restart_point)
 
     dump_as_pickle(data=scenarios, output_dir=out_folder_path, file_name=f'{sys.argv[1]}_{sys.argv[2]}_log')
 

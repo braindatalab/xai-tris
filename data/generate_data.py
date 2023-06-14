@@ -14,6 +14,7 @@ from datetime import datetime
 from pathlib import Path
 
 import os
+import sys
 
 os.environ['PYTHONHASHSEED']=str(SEED)
 random.seed(SEED)
@@ -33,7 +34,8 @@ def data_generation_process(config: Dict, output_dir: str) -> List:
     for i in range(config['num_experiments']): # generate multiple datasets if desired
         
         backgrounds = generate_backgrounds(config['sample_size'], config['mean_data'], config['var_data'], image_shape )
-        imagenet_backgrounds = generate_imagenet(config['sample_size'])
+        if config["use_imagenet"]:
+            imagenet_backgrounds = generate_imagenet(config['sample_size'])
         
         # Iterate over config
         k = 0
@@ -44,13 +46,15 @@ def data_generation_process(config: Dict, output_dir: str) -> List:
                 ground_truths = patterns.copy()
 
                 for correlated in ['white', 'correlated', 'imagenet']:
+                    if correlated == 'imagenet' and not config["use_imagenet"]:
+                        continue
                     copy_backgrounds = np.zeros((config['sample_size'], image_shape[0]*image_shape[1]))
                     params['correlated_background'] = correlated
                     if correlated == 'correlated':
                         for j, background in enumerate(backgrounds.copy()):
                             copy_backgrounds[j] = gaussian_filter(np.reshape(background, (image_shape[0],image_shape[1])), config['smoothing_sigma']).reshape((image_shape[0]*image_shape[1]))
                         alpha_ind = 1
-                    elif correlated == 'imagenet':
+                    elif correlated == 'imagenet' and config["use_imagenet"]:
                         copy_backgrounds = imagenet_backgrounds.copy()
                         alpha_ind = 2
                     else:
@@ -116,7 +120,10 @@ def data_generation_process(config: Dict, output_dir: str) -> List:
                         dump_as_pickle(data=scenarios, output_dir=output_dir, file_name=scenario_key)
 
 def main():
-    config = load_json_file(file_path='data/data_config.json') 
+    config_file = 'data_config'
+    if len (sys.argv) > 1:
+        config_file = sys.argv[1]
+    config = load_json_file(file_path=f'data/{config_file}.json') 
     
     date = datetime.now().strftime("%Y-%m-%d-%H-%M")
     folder_path = f'{config["output_dir"]}/{date}'

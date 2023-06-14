@@ -3,8 +3,9 @@
   "epochs": 2,
   "runs_per_model": 2,
   "patience": 400,
+  "lr": 0.0005,
   "output_dir": "artifacts/tetris/training",
-  "data_path": "artifacts/tetris/data/2023-06-13-15-52",
+  "data_path": "artifacts/tetris/data/2023-06-14-11-32",
   "checkpoint_path":  "",
   "data_scenario": "tetris_data"
 }

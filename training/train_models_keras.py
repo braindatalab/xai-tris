@@ -48,6 +48,9 @@ from keras import backend as K
 
 
 def train(config: Dict, data: List, lr: float, folder_path: str, experiment_num: int, scenarios_checkpoint: TrainingScenarios=None, restart_point: Tuple=None):
+    n_dim = data[list(data.keys())[0]].x_test.shape[1]
+    edge_length = int(np.sqrt(n_dim))
+
     scenarios = TrainingScenarios
 
     start_from_checkpoint = False
@@ -60,6 +63,10 @@ def train(config: Dict, data: List, lr: float, folder_path: str, experiment_num:
     accs = {'val': pd.Series(), 'test': pd.Series()}
 
     models = ['LLR_Keras','MLP_Keras','CNN_Keras']
+    print(edge_length)
+    if edge_length == 8:
+        models = ['LLR_Keras', 'MLP8by8_Keras', 'CNN8by8_Keras']
+    print(models)
 
     for i, (data_params, data_record) in enumerate(data.items()):
         scenarios['training_records'][data_params] = {}
@@ -113,11 +120,11 @@ def train(config: Dict, data: List, lr: float, folder_path: str, experiment_num:
 
 
                 if 'CNN' in model_name:
-                    train_data = train_data.reshape(train_data.shape[0], 64, 64, 1)
-                    val_data = val_data.reshape(val_data.shape[0], 64, 64, 1)
-                    test_data = test_data.reshape((test_data.shape[0], 64, 64, 1))
+                    train_data = train_data.reshape(train_data.shape[0], edge_length, edge_length, 1)
+                    val_data = val_data.reshape(val_data.shape[0], edge_length, edge_length, 1)
+                    test_data = test_data.reshape((test_data.shape[0], edge_length, edge_length, 1))
 
-                model = models_dict.get(model_name)(lr)
+                model = models_dict.get(model_name)(lr,  image_shape=[edge_length, edge_length])
 
                 save_path = f'{folder_path}/{data_params}_{model_name}_{experiment_num}_{j}.h5'
 
@@ -186,12 +193,10 @@ def main():
     if len(data_scenario) == 0:
         raise Exception(f'Scenario {sys.argv[1]} not recognised! Check the specified data_path in training_config.json and try again')
 
-    lr = 0.0005
-
     scenarios_checkpoint = None
     restart_point = None
 
-    scenarios = train(config=config, data=data_scenario, lr=lr, folder_path=folder_path, experiment_num=int(sys.argv[3]), scenarios_checkpoint=scenarios_checkpoint, restart_point=restart_point)
+    scenarios = train(config=config, data=data_scenario, lr=config['lr'], folder_path=folder_path, experiment_num=int(sys.argv[3]), scenarios_checkpoint=scenarios_checkpoint, restart_point=restart_point)
 
     dump_as_pickle(data=scenarios, output_dir=out_folder_path, file_name=f'{sys.argv[1]}_{sys.argv[2]}_log_keras')
 

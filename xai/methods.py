@@ -9,7 +9,7 @@ from common import DataRecord, SEED
 from scipy.ndimage import sobel, laplace
 import numpy as np
 
-from training.models import LLR, MLP, CNN
+from training.models import LLR, MLP, CNN, CNN8by8
 
 np.random.seed(SEED)
 
@@ -41,22 +41,22 @@ def get_attributions(model: torch.nn.Module, dataset: DataRecord, methods: List,
         baselines = torch.zeros((mini_batch, n_dim))
 
     for method_name in methods:
-        if method_name == 'Guided GradCAM' and type(model) != CNN:
+        if method_name == 'Guided GradCAM' and type(model) != CNN and type(model) != CNN8by8:
             continue
         # print(f'Calculating attributions for {method_name}')
-        if type(model) == CNN:
+        if type(model) == CNN or type(model) == CNN8by8:
             method_attributions = np.zeros((test_size, 1, edge_length, edge_length))
         else:
             method_attributions = np.zeros((test_size, n_dim))
         print('Calculating attributions for method', method_name)
         for ind in range(0, test_size, mini_batch):
-            if type(model) == CNN:
+            if type(model) == CNN or type(model) == CNN8by8:
                 x = dataset.x_test[ind:ind+mini_batch].reshape(dataset.x_test[ind:ind+mini_batch].shape[0], 1, edge_length, edge_length)
             else:
                 x = dataset.x_test[ind:ind+mini_batch].reshape(dataset.x_test[ind:ind+mini_batch].shape[0], n_dim)
             x.requires_grad = True
             if method_name in baselines_methods:
-                if type(model) == CNN:
+                if type(model) == CNN or type(model) == CNN8by8:
                     baselines = baselines.reshape(mini_batch, 1, edge_length, edge_length)
                 else:
                     baselines = baselines.reshape(mini_batch, n_dim)
