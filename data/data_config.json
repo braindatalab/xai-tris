@@ -2,7 +2,7 @@
   "data_scenario": "tetris_data",
   "output_dir": "artifacts/tetris/data",
   "num_experiments": 1,
-  "sample_size": 1000,
+  "sample_size": 40000,
   "test_split": 0.1,
   "image_shape": [8,8],
   "image_scale": 8,

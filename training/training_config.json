@@ -1,7 +1,7 @@
 {
   "batch_size": 512,
-  "epochs": 2,
-  "runs_per_model": 2,
+  "epochs": 500,
+  "runs_per_model": 5,
   "patience": 400,
   "lr": 0.0005,
   "output_dir": "artifacts/tetris/training",

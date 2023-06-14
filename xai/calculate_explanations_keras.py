@@ -33,7 +33,11 @@ def apply_xai(config: Dict) -> XAIScenarios:
         for key,value in data_scenario.items():
             data[key] = value
 
-    keras_model_paths = glob(f'./artifacts/tetris/training/{config["training_output"]}/{sys.argv[1]}*_{sys.argv[2]}*_Keras_0_*.h5')
+        # relatively hard-coded right now as 64x64 results were just on 1 experiment
+    experiments_regex = '_0_*'
+    if config["num_experiments"] > 1:
+        experiments_regex = ''
+    keras_model_paths = glob(f'{config["training_output"]}/{sys.argv[1]}*_{sys.argv[2]}*_Keras{experiments_regex}.h5')
 
     print(keras_model_paths)
     print(data.keys())

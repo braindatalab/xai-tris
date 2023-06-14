@@ -104,7 +104,7 @@ class CNN8by8(Module):
     def forward(self, x):
         x = self.cnn_layers(x)
         x = x.view(x.size(0), -1)
-        x = self.linear_layers(x)
+        x = softmax(self.linear_layers(x), dim=1)
         return x
 
 class MLP8by8(Module):   
@@ -124,7 +124,7 @@ class MLP8by8(Module):
 
     # Defining the forward pass    
     def forward(self, x):
-        x = self.linear_layers(x)
+        x = softmax(self.linear_layers(x), dim=1)
         return x
 
 

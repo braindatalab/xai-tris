@@ -198,7 +198,10 @@ def main():
 
     scenarios = train(config=config, data=data_scenario, lr=config['lr'], folder_path=folder_path, experiment_num=int(sys.argv[3]), scenarios_checkpoint=scenarios_checkpoint, restart_point=restart_point)
 
-    dump_as_pickle(data=scenarios, output_dir=out_folder_path, file_name=f'{sys.argv[1]}_{sys.argv[2]}_log_keras')
+    # out_log = f'{sys.argv[1]}_{sys.argv[2]}_log'
+    # if sys.argv[1] == '*' and sys.argv[1] == '*':
+    #     out_log = 'combined_log'
+    # dump_as_pickle(data=scenarios, output_dir=out_folder_path, file_name=out_log)
 
 
 

@@ -34,8 +34,11 @@ def apply_xai(config: Dict) -> XAIScenarios:
         for key,value in data_scenario.items():
             data[key] = value
 
-    # hard coded for experiment 0 (_0_ section) as 64x64 experiments just used 1 experiment
-    torch_model_paths = glob(f'./artifacts/tetris/training/{config["training_output"]}/{sys.argv[1]}*_{sys.argv[2]}*_0_*.pt')
+    # relatively hard-coded right now as 64x64 results were just on 1 experiment
+    experiments_regex = '_0_*'
+    if config["num_experiments"] > 1:
+        experiments_regex = ''
+    torch_model_paths = glob(f'{config["training_output"]}/{sys.argv[1]}*_{sys.argv[2]}*{experiments_regex}.pt')
 
     for scenario_name, dataset in data.items():
         results[scenario_name] = {

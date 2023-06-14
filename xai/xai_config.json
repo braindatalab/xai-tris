@@ -22,9 +22,10 @@
         "sobel",
         "laplace"
     ],
-    "test_size": 5,
-    "mini_batch": 5,
-    "training_output": "training_output_8by8",
+    "test_size": 2000,
+    "mini_batch": 50,
+    "num_experiments": 1,
+    "training_output": "artifacts/tetris/training/training_output",
     "data_path": "artifacts/tetris/data/2023-06-14-11-32",
     "output_dir": "artifacts/tetris/xai"
 }
