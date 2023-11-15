@@ -143,8 +143,8 @@ def generate_translations_rotations(params: Dict, image_shape: list) -> np.array
             if rand > 0:
                 pattern_adj = np.rot90(pattern, k=rand)
         
-            rand_y = np.random.randint(0, high= (image_shape[0])-pattern_adj.shape[0])
-            rand_x = np.random.randint(0, high= (image_shape[0])-pattern_adj.shape[1])
+            rand_y = np.random.randint(0, high= (image_shape[0])-pattern_adj.shape[0] + 1)
+            rand_x = np.random.randint(0, high= (image_shape[0])-pattern_adj.shape[1] + 1)
             pos = (rand_y, rand_x)
 
             patterns[j][pos[0]:pos[0]+pattern_adj.shape[0], pos[1]:pos[1]+pattern_adj.shape[1]] = pattern_adj
