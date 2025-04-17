@@ -3,6 +3,7 @@
   "output_dir": "artifacts/tetris/data",
   "num_experiments": 1,
   "sample_size": 10000,
+  "test_split": 0.1,
   "manipulation": 1.0,
   "mean_data": 0,
   "var_data": 0.5,
@@ -12,7 +13,6 @@
     "8x8": {
       "image_shape": [8, 8],
       "image_scale": 1,
-      "test_split": 0.2,
       "smoothing_sigma": 3,
       "positions": [[1, 1], [4, 5]],
       "distractor_positions": [[[1, 1], [4, 1]], [[1, 5], [4, 5]]],
@@ -34,7 +34,7 @@
           "scenario": "translations_rotations",
           "manipulation_type": "additive",
           "pattern_scales": [1],
-          "snrs": [[0.65], [0.2], [0.1], [[0.25, 0.5, 0.25]]]
+          "snrs": [[0.65], [0.2], [0.03], [[0.25, 0.5, 0.25]]]
         },
         "xor": {
           "scenario": "xor",
@@ -54,7 +54,6 @@
     "64x64": {
       "image_shape": [8, 8],
       "image_scale": 8,
-      "test_split": 0.1,
       "smoothing_sigma": 10,
       "positions": [[8, 8], [32, 40]],
       "distractor_positions": [[[8, 8], [32, 8]], [[8, 40], [32, 40]]],

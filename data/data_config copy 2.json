@@ -30,6 +30,16 @@
               "white": [[0.2, 0.3, 0.5]],
               "correlated": [[0.1, 0.1, 0.8]],
               "imagenet": [[0.25, 0.3, 0.45]]
+            },
+            "division": {
+              "white": [0.4],
+              "correlated": [0.4],
+              "imagenet": [0.4]
+            },
+            "distractor_division": {
+              "white": [[0.2, 0.3, 0.5]],
+              "correlated": [[0.1, 0.1, 0.8]],
+              "imagenet": [[0.25, 0.3, 0.45]]
             }
           }
         },
@@ -47,9 +57,9 @@
               "imagenet": [[0.3, 0.1, 0.6]]
             },
             "division": {
-              "white": [0.7],
-              "correlated": [0.2],
-              "imagenet": [0.3]
+              "white": [0.4],
+              "correlated": [0.4],
+              "imagenet": [0.4]
             },
             "distractor_division": {
               "white": [[0.2, 0.3, 0.5]],

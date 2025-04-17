@@ -20,17 +20,19 @@ In four steps we can reproduce the results: (i) generate tetromino data, (ii) tr
 ##### Download ImageNet data
 If one wishes to use the data from the ImageNet-1k, we sourced it from [HuggingFace](https://huggingface.co/datasets/imagenet-1k) by making an account and agreeing to the license terms. Please respect these license terms when using this data. Download and extract images into a folder `imagenet_images/` in the top level of this repository. We used the `N=50,000` validation set due to the appropriate volume size for our datasets and benchmarks. 
 
-##### 64x64 Data
+##### Data Generation
 Once ImageNet data is downloaded and extracted above (if using it), configuration is set by the `data/data_config.json` file, with fields explained in data/README.md. Generate data via:
 ```shell
-python -m data.generate_data 
+python -m data.generate_data data_config 64x64 {folder_name}
 ```
 
-##### 8x8 Data
-One can also generate the original 8x8 data (without ImageNet backgrounds), which is quicker and less computationally demanding to run, and also produces interesting results. Configuration here is set by the `data/data_config_8by8.json` file. Generate data via:
+where `folder_name` is an optional argument. If not specified, the current timestamp and setting (`8x8` or `64x64` will be used). Now, any scenario can have any of the three background types (white, correlated, imagenet), and we have added new classification scenarios (division, distractor additive, distractor multiplicative) that can be combined with the standard scenarios and background types.
+
+<!-- ##### 8x8 Data
+One can also generate the original 8x8 data (without ImageNet backgrounds), which is quicker and less computationally demanding to run, and also produces interesting results. Configuration here is also set by the `data/data_config.json` file, there is no longer a need for a separate 8x8 file. Generate data via:
 ```shell
 python -m data.generate_data data_config_8by8
-```
+``` -->
 
 #### Train models
 
