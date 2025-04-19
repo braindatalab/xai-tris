@@ -189,10 +189,10 @@ def data_generation_process(config: Dict, output_dir: str):
                             alpha_str = "_".join([f"{a:.2f}" for a in alpha]) if isinstance(alpha, list) else f"{alpha:.2f}"
                             
                             manip_str = manip_type
-                            if 'distractor' in manip_type:
-                                manip_str = 'distractor'
-                                if manip_type == 'distractor_division':
-                                    manip_str = 'distractor_division'
+                            # if 'distractor' in manip_type:
+                            #     manip_str = 'distractor'
+                            #     if manip_type == 'distractor_division':
+                            #         manip_str = 'distractor_division'
 
                             scenario_key = f"{param_name}_{manip_str}_{config['image_scale']}d{pattern_scale}p_{alpha_str}_{bg_type}"
                             record = DataRecord(x_train, y_train, x_val, y_val, x_test, y_test, masks_train, masks_val, masks_test)

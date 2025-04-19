@@ -27,9 +27,14 @@
               "imagenet": [0.15]
             },
             "distractor_additive": {
-              "white": [[0.2, 0.3, 0.5]],
-              "correlated": [[0.1, 0.1, 0.8]],
-              "imagenet": [[0.25, 0.3, 0.45]]
+              "white": [[0.15, 0.425, 0.425]],
+              "correlated": [[0.05, 0.475, 0.475]],
+              "imagenet": [[0.10, 0.45, 0.45]]
+            },
+            "distractor_division": {
+              "white": [[0.55, 0.225, 0.225]],
+              "correlated": [[0.35, 0.325, 0.325]],
+              "imagenet": [[0.40, 0.3, 0.3]]
             }
           }
         },
@@ -39,22 +44,22 @@
             "multiplicative": {
               "white": [0.7],
               "correlated": [0.1],
-              "imagenet": [0.2]
-            },
-            "distractor_multiplicative": {
-              "white": [[0.5, 0.3, 0.3]],
-              "correlated": [[0.25, 0.15, 0.6]],
-              "imagenet": [[0.3, 0.1, 0.6]]
-            },
-            "division": {
-              "white": [0.7],
-              "correlated": [0.2],
               "imagenet": [0.3]
             },
+            "distractor_multiplicative": {
+              "white": [[0.45, 0.275, 0.275]],
+              "correlated": [[0.25, 0.375, 0.375]],
+              "imagenet": [[0.40, 0.3, 0.3]]
+            },
+            "division": {
+              "white": [0.55],
+              "correlated": [0.25],
+              "imagenet": [0.55]
+            },
             "distractor_division": {
-              "white": [[0.2, 0.3, 0.5]],
-              "correlated": [[0.1, 0.1, 0.8]],
-              "imagenet": [[0.25, 0.3, 0.45]]
+              "white": [[0.6, 0.2, 0.2]],
+              "correlated": [[0.35, 0.325, 0.325]],
+              "imagenet": [[0.55, 0.225, 0.225]]
             }
           }
         },
@@ -64,22 +69,22 @@
             "additive": {
               "white": [0.65],
               "correlated": [0.2],
-              "imagenet": [0.6]
+              "imagenet": [0.5]
             },
             "distractor_additive": {
-              "white": [[0.45, 0.25, 0.25]],
-              "correlated": [[0.1, 0.15, 0.75]],
-              "imagenet": [[0.3, 0.3, 0.4]]
+              "white": [[0.45, 0.275, 0.275]],
+              "correlated": [[0.35, 0.325, 0.325]],
+              "imagenet": [[0.35, 0.325, 0.325]]
             },
             "division": {
-              "white": [0.4],
-              "correlated": [0.4],
-              "imagenet": [0.4]
+              "white": [0.75],
+              "correlated": [0.75],
+              "imagenet": [0.75]
             },
             "distractor_division": {
-              "white": [[0.2, 0.3, 0.5]],
-              "correlated": [[0.1, 0.1, 0.8]],
-              "imagenet": [[0.25, 0.3, 0.45]]
+              "white": [[0.85, 0.075, 0.075]],
+              "correlated": [[0.85, 0.075, 0.075]],
+              "imagenet": [[0.85, 0.075, 0.075]]
             }
           }
         },
@@ -89,28 +94,37 @@
             "additive": {
               "white": [0.35],
               "correlated": [0.15],
-              "imagenet": [0.13]
+              "imagenet": [0.25]
             },
             "distractor_additive": {
-              "white": [[0.25, 0.2, 0.55]],
-              "correlated": [[0.28, 0.3, 0.42]],
-              "imagenet": [[0.2, 0.25, 0.55]]
+              "white": [[0.25, 0.375, 0.375]],
+              "correlated": [[0.30, 0.35, 0.35]],
+              "imagenet": [[0.30, 0.35, 0.35]]
             },
             "division": {
-              "white": [0.4],
-              "correlated": [0.4],
-              "imagenet": [0.4]
+              "white": [0.8],
+              "correlated": [0.8],
+              "imagenet": [0.8]
+            },
+            "multiplicative": {
+              "white": [0.7],
+              "correlated": [0.1],
+              "imagenet": [0.3]
             },
             "distractor_division": {
-              "white": [[0.2, 0.3, 0.5]],
-              "correlated": [[0.1, 0.1, 0.8]],
-              "imagenet": [[0.25, 0.3, 0.45]]
+              "white": [[0.85, 0.075, 0.075]],
+              "correlated": [[0.85, 0.075, 0.075]],
+              "imagenet": [[0.85, 0.075, 0.075]]
+            },
+            "distractor_multiplicative": {
+              "white": [[0.45, 0.275, 0.275]],
+              "correlated": [[0.25, 0.375, 0.375]],
+              "imagenet": [[0.40, 0.3, 0.3]]
             }
           }
         }
       }
     },
-
     "64x64": {
       "image_shape": [8, 8],
       "image_scale": 8,
