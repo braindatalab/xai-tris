@@ -1,0 +1,150 @@
+{
+  "data_scenario": "tetris_data",
+  "output_dir": "artifacts/tetris/data",
+  "num_experiments": 1,
+  "sample_size": 10000,
+  "test_split": 0.1,
+  "manipulation": 1.0,
+  "mean_data": 0,
+  "var_data": 0.5,
+  "patterns": ["t", "l"],
+  "use_imagenet": false,
+  "modes": {
+    "8x8": {
+      "image_shape": [8, 8],
+      "image_scale": 1,
+      "smoothing_sigma": 3,
+      "positions": [[1, 1], [4, 5]],
+      "distractor_positions": [[1, 1], [5, 1], [1, 5], [4, 5]],
+      "use_imagenet": false,
+      "parameterizations": {
+        "linear": {
+          "pattern_scales": [1],
+          "snrs": {
+            "additive": {
+            },
+            "distractor_additive": {
+            }
+          }
+        },
+        "multiplicative": {
+          "pattern_scales": [1],
+          "snrs": {
+            "multiplicative": {
+            },
+            "distractor_multiplicative": {
+            }
+          }
+        },
+        "translations_rotations": {
+          "pattern_scales": [1],
+          "snrs": {
+            "additive": {
+            },
+            "distractor_additive": {
+            }
+          }
+        },
+        "xor": {
+          "pattern_scales": [1],
+          "snrs": {
+            "additive": {
+            },
+            "distractor_additive": {
+            }
+          }
+        }
+      }
+    },
+    "64x64": {
+      "image_shape": [8, 8],
+      "image_scale": 8,
+      "smoothing_sigma": 10,
+      "positions": [[8, 8], [32, 40]],
+      "distractor_positions": [[[8, 8], [32, 8]], [[8, 40], [32, 40]]],
+      "use_imagenet": true,
+      "parameterizations": {
+        "linear": {
+          "pattern_scales": [8],
+          "snrs": {
+            "additive": {
+              "white": [0.03],
+              "correlated": [0.02],
+              "imagenet": [0.06]
+            },
+            "distractor_additive": {
+              "white": [[0.2, 0.3, 0.5]],
+              "correlated": [[0.1, 0.1, 0.8]],
+              "imagenet": [[0.25, 0.3, 0.45]]
+            },
+            "division": {
+              "white": [0.5],
+              "correlated": [0.75],
+              "imagenet": [0.5]
+            }
+          }
+        },
+        "multiplicative": {
+          "pattern_scales": [8],
+          "snrs": {
+            "multiplicative": {
+              "white": [0.2],
+              "correlated": [0.65],
+              "imagenet": [0.2]
+            },
+            "distractor_multiplicative": {
+              "white": [[0.2, 0.25, 0.55]],
+              "correlated": [[0.25, 0.15, 0.6]],
+              "imagenet": [[0.3, 0.1, 0.6]]
+            },
+            "division": {
+              "white": [0.2],
+              "correlated": [0.2],
+              "imagenet": [0.3]
+            }
+          }
+        },
+        "translations_rotations": {
+          "pattern_scales": [4],
+          "snrs": {
+            "additive": {
+              "white": [0.575],
+              "correlated": [0.375],
+              "imagenet": [0.03]
+            },
+            "distractor_additive": {
+              "white": [[0.25, 0.25, 0.5]],
+              "correlated": [[0.1, 0.15, 0.75]],
+              "imagenet": [[0.3, 0.3, 0.4]]
+            },
+            "division": {
+              "white": [0.5],
+              "correlated": [0.3],
+              "imagenet": [0.3]
+            }
+          }
+        },
+        "xor": {
+          "pattern_scales": [8],
+          "snrs": {
+            "additive": {
+              "white": [0.35],
+              "correlated": [0.15],
+              "imagenet": [0.13]
+            },
+            "distractor_additive": {
+              "white": [[0.25, 0.2, 0.55]],
+              "correlated": [[0.28, 0.3, 0.42]],
+              "imagenet": [[0.2, 0.25, 0.55]]
+            },
+            "division": {
+              "white": [0.2],
+              "correlated": [0.3],
+              "imagenet": [0.5]
+            }
+          }
+        }
+      }
+    }
+  }
+}

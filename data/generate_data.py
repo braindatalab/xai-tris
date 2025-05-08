@@ -17,7 +17,7 @@ from data.data_utils import (
     generate_fixed,
     generate_translations_rotations,
     generate_xor,
-    generate_two_distractors,
+    generate_distractors,
     normalise_data,
     scale_to_bound
 )
@@ -113,7 +113,7 @@ def data_generation_process(config: Dict, output_dir: str):
     image_shape = (np.array(config["image_shape"]) * config["image_scale"]).astype(int).tolist()
     base_shape = tuple(image_shape)
 
-    for _ in range(config['num_experiments']):
+    for i in range(config['num_experiments']):
         base_backgrounds = generate_backgrounds(config['sample_size'], config['mean_data'], config['var_data'], image_shape)
         imagenet_backgrounds = (
             generate_imagenet(config['sample_size'], image_shape)
@@ -126,7 +126,7 @@ def data_generation_process(config: Dict, output_dir: str):
                 patterns = data_generators[param_name](params=config, image_shape=image_shape)
                 ground_truths = patterns.copy()
 
-                distractors = generate_two_distractors(config, image_shape=image_shape, N=config['sample_size'])
+                distractors = generate_distractors(config, image_shape=image_shape, N=config['sample_size'])
 
                 background_types = ["white", "correlated", "imagenet"]
 
@@ -193,8 +193,10 @@ def data_generation_process(config: Dict, output_dir: str):
                             #     manip_str = 'distractor'
                             #     if manip_type == 'distractor_division':
                             #         manip_str = 'distractor_division'
-
-                            scenario_key = f"{param_name}_{manip_str}_{config['image_scale']}d{pattern_scale}p_{alpha_str}_{bg_type}"
+                            exp_str = ''
+                            if config['num_experiments'] > 1:
+                                exp_str = f'_{str(i)}'
+                            scenario_key = f"{param_name}_{manip_str}_{config['image_scale']}d{pattern_scale}p_{alpha_str}_{bg_type}{exp_str}"
                             record = DataRecord(x_train, y_train, x_val, y_val, x_test, y_test, masks_train, masks_val, masks_test)
                             dump_as_pickle(record, output_dir, scenario_key)
 

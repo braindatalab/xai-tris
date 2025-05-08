@@ -28,7 +28,16 @@ def get_patterns(params: Dict) -> List[np.ndarray]:
     return [pattern_dict[p] for p in params['patterns']]
 
 def get_distractors(params: Dict) -> List[np.ndarray]:
-    return get_patterns(params)  # Use same patterns unless specified otherwise
+    manip = params['manipulation']
+    scale = params['pattern_scale']
+
+    sq = np.array([[manip, manip], [manip, manip]])
+
+    # pattern_dict = {
+    #     'sq': np.kron(sq, np.ones((scale, scale))),
+    # }
+
+    return np.kron(sq, np.ones((scale, scale)))
 
 def normalise_data(signal: np.ndarray, background: np.ndarray, distractor: np.ndarray = None) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     signal /= np.linalg.norm(signal, ord='fro')
@@ -130,20 +139,23 @@ def generate_xor(params: Dict, image_shape: List[int]) -> np.ndarray:
                 out[i] = gaussian_filter(out[i], 1.5)
     return out.reshape(N, -1)
 
-def generate_two_distractors(params: Dict, image_shape: List[int], N: int) -> np.ndarray:
+def generate_distractors(params: Dict, image_shape: List[int], N: int) -> np.ndarray:
     patterns = np.zeros((N, image_shape[0], image_shape[1]))
-    chosen = get_distractors(params)
+    pat = get_distractors(params)
     signs = [-1, 1]
 
     for j in range(N):
-        rand_signs = np.random.choice(signs, 2)
-        inds = np.random.choice(len(chosen), 2)
-        poses = params['distractor_positions'][np.random.choice([0, 1])]
-        pat1, pat2 = chosen[inds[0]], chosen[inds[1]]
-        pos1, pos2 = poses[0], poses[1]
+        # inds = np.random.choice(len(pat), 2)
+        poses = params['distractor_positions']
+        rand_signs = np.random.choice(signs, len(poses))
+        for i, pos in enumerate(poses):
+            patterns[j][pos[0]:pos[0]+pat.shape[0], pos[1]:pos[1]+pat.shape[1]] = pat * rand_signs[i]
 
-        patterns[j][pos1[0]:pos1[0]+pat1.shape[0], pos1[1]:pos1[1]+pat1.shape[1]] = pat1 * rand_signs[0]
-        patterns[j][pos2[0]:pos2[0]+pat2.shape[0], pos2[1]:pos2[1]+pat2.shape[1]] = pat2 * rand_signs[1]
+        # pat1, pat2 = chosen[inds[0]], chosen[inds[1]]
+        # pos1, pos2 = poses[0], poses[1]
+        # poses = params['distractor_positions'][np.random.choice([0, 1])]
+        # patterns[j][pos1[0]:pos1[0]+pat1.shape[0], pos1[1]:pos1[1]+pat1.shape[1]] = pat1 * rand_signs[0]
+        # patterns[j][pos2[0]:pos2[0]+pat2.shape[0], pos2[1]:pos2[1]+pat2.shape[1]] = pat2 * rand_signs[1]
 
         if params['pattern_scale'] > 3:
             patterns[j] = gaussian_filter(patterns[j], 1.5)
